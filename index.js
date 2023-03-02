@@ -7,6 +7,8 @@ const PORT = 3100;
 const wss = new WebSocketServer({ port: PORT });
 
 
+
+
 wss.on('connection', function connection(ws) {
   console.log('client connect');
   let completion;
@@ -17,15 +19,13 @@ wss.on('connection', function connection(ws) {
       const { text, type } = JSON.parse(data.toString());
 
       if (type === 'stop') {
-        // throw Error('stop')
-        // console.log(completion);
         completion.data.destroy();
         return;
       }
 
       if (text) {
         let res = '';  // 保存回复的数据
-        console.log(text);
+        console.log(`${text}`);
         // console.log([...Buffer.from(text)], encode(text));
         // 开始
         completion = await questionCompletion(encode(text), data => {
@@ -45,7 +45,6 @@ wss.on('connection', function connection(ws) {
             
               if (text) {
                 res += `${text}`
-                // console.log(text);
                 ws.send(text);
               }
 
