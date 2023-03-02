@@ -40,7 +40,7 @@ export async function questionCompletion(text, callback) {
 }
 
 (async () => {
-  const text = `\nHuman:你知道nodejs吗 AI:？ Human:你知道nodejs吗？ AI:\n\n是的，我知道Node.js。它是一个用于构建服务器端JavaScript应用程序的平台。`
+  const text = `ME:你好 AI:\n\n你好！ ME:你知道nodejs吗 AI:\n\n当然知道，Node.js 是一个 ME:你知道express吗？ `
   let res = ''
   await questionCompletion(encode(text), data => {
     const lines = data.toString().split('\n').filter(line => line.trim() !== '');
@@ -66,4 +66,4 @@ export async function questionCompletion(text, callback) {
       }
     }
   }); // 获取result
-})
+})()

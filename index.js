@@ -1,6 +1,6 @@
 import { WebSocketServer } from 'ws';
 import { questionCompletion } from './utils/openai.js';
-import { encode, decode} from 'gpt-3-encoder';
+import { encode, decode } from 'gpt-3-encoder';
 
 const PORT = 3100;
 
@@ -42,10 +42,11 @@ wss.on('connection', function connection(ws) {
               // console.log(message);
               const parsed = JSON.parse(message);
               const text = parsed.choices[0].text;
-            
+
               if (text) {
                 res += `${text}`
-                ws.send(text);
+                // console.log(text);
+                ws.send(text.replace(/AI:/g, ''));
               }
 
             } catch (error) {
