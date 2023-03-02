@@ -25,11 +25,10 @@ wss.on('connection', function connection(ws) {
 
       if (text) {
         let res = '';  // 保存回复的数据
-        // console.log(`${text}`);
-        // console.log([...Buffer.from(text)], encode(text));
-        console.log(encode(text).length);
+        console.log(text.length);
         // 开始
-        completion = await questionCompletion(encode(text), data => {
+        
+        completion = await questionCompletion(text, data => {
           const lines = data.toString().split('\n').filter(line => line.trim() !== '');
 
           for (const line of lines) {
@@ -40,14 +39,13 @@ wss.on('connection', function connection(ws) {
               return;
             }
             try {
-              // console.log(message);
               const parsed = JSON.parse(message);
-              const text = parsed.choices[0].text;
+              // 获取回复的内容
+              const { delta: { content } } = parsed.choices[0];
 
-              if (text) {
-                res += `${text}`
-                // console.log(text);
-                ws.send(text.replace(/AI:/g, ''));
+              if (content) {
+                res += content;
+                ws.send(content); // 发送给客户端
               }
 
             } catch (error) {

@@ -2,7 +2,7 @@ import { Configuration, OpenAIApi } from 'openai';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { encode, decode} from 'gpt-3-encoder';
+import { encode, decode } from 'gpt-3-encoder';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,11 +14,13 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export async function questionCompletion(text, callback) {
+export async function questionCompletion(messages, callback) {
   try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: text,
+    const completion = await openai.createChatCompletion({
+      // model: "text-davinci-003",
+      model: "gpt-3.5-turbo",
+      // prompt: text,
+      messages,
       max_tokens: 3000,
       temperature: 0,
       stream: true,
@@ -27,22 +29,27 @@ export async function questionCompletion(text, callback) {
       presence_penalty: 0.6
     }, {
       timeout: 10000,
+      proxy: {
+        port: 7890
+      },
       responseType: 'stream',
     });
     // 实时监听回答
     completion.data.on('data', callback);
-
+    // console.log(completion.headers);
     return completion;
   } catch (error) {
     // console.log(error);
-    console.log(error.response);
+    console.log(error.response?.status);
   }
 }
 
 (async () => {
-  const text = `ME:你好 AI:\n\n你好！ ME:你知道nodejs吗 AI:\n\n当然知道，Node.js 是一个 ME:你知道express吗？ `
+  const text = [
+    { role: "user", content: "你好" },
+  ]
   let res = ''
-  await questionCompletion(encode(text), data => {
+  await questionCompletion(text, data => {
     const lines = data.toString().split('\n').filter(line => line.trim() !== '');
     // console.log(lines);
 
@@ -55,10 +62,10 @@ export async function questionCompletion(text, callback) {
       try {
         // console.log(message);
         const parsed = JSON.parse(message);
-        const text = parsed.choices[0].text;
+        const { delta: { content } } = parsed.choices[0];
 
-        if (text) {
-          res += `${text}`
+        if (content) {
+          res += `${content}`
         }
 
       } catch (error) {
