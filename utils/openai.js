@@ -66,4 +66,4 @@ export async function questionCompletion(text, callback) {
       }
     }
   }); // 获取result
-})()
+})
