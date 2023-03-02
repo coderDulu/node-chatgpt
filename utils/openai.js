@@ -21,7 +21,7 @@ export async function questionCompletion(messages, callback) {
       model: "gpt-3.5-turbo",
       // prompt: text,
       messages,
-      max_tokens: 3000,
+      max_tokens: 4000,
       temperature: 0,
       stream: true,
       stop: ["ME: ", "AI: "],
@@ -30,7 +30,7 @@ export async function questionCompletion(messages, callback) {
     }, {
       timeout: 10000,
       proxy: {
-        port: 7890
+        // port: 7890
       },
       responseType: 'stream',
     });
