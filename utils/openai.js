@@ -2,7 +2,6 @@ import { Configuration, OpenAIApi } from 'openai';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { encode, decode } from 'gpt-3-encoder';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,22 +15,22 @@ const openai = new OpenAIApi(configuration);
 
 export async function questionCompletion(messages, callback) {
   try {
+
     const completion = await openai.createChatCompletion({
-      // model: "text-davinci-003",
       model: "gpt-3.5-turbo",
-      // prompt: text,
       messages,
-      max_tokens: 4000,
+      max_tokens: 3000,
       temperature: 0,
       stream: true,
-      stop: ["ME: ", "AI: "],
+      // stop: ["ME: ", "AI: "],
       frequency_penalty: 0,
       presence_penalty: 0.6
     }, {
-      timeout: 10000,
-      proxy: {
-        // port: 7890
-      },
+      // timeout: 10000,
+      // proxy: {
+      //   port: 7890,
+      //   // host: "127.0.0.1"
+      // },
       responseType: 'stream',
     });
     // 实时监听回答
@@ -39,16 +38,26 @@ export async function questionCompletion(messages, callback) {
     // console.log(completion.headers);
     return completion;
   } catch (error) {
-    // console.log(error);
-    console.log(error.response?.status);
+    console.log('error status =>', error);
   }
+}
+
+function chineseToUnicode(str) {
+  // if(!str) return;
+  let unicodeStr = "";
+  for (let i = 0; i < str.length; i++) {
+    let unicodeVal = str.charCodeAt(i).toString(16);
+    unicodeStr += "\\u" + "0".repeat(4 - unicodeVal.length) + unicodeVal;
+  }
+  return unicodeStr;
 }
 
 (async () => {
   const text = [
-    { role: "user", content: "你好" },
+    { role: "user", content: '你好' },
   ]
   let res = ''
+
   await questionCompletion(text, data => {
     const lines = data.toString().split('\n').filter(line => line.trim() !== '');
     // console.log(lines);
