@@ -27,7 +27,7 @@ wss.on('connection', function connection(ws) {
         let res = '';  // 保存回复的数据
         console.log(text.length);
         // 开始
-        
+ 
         completion = await questionCompletion(text, data => {
           const lines = data.toString().split('\n').filter(line => line.trim() !== '');
 
