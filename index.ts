@@ -40,6 +40,8 @@ const messages: {
 try {
   const bot = new TelegramBot(token, { polling: true, baseApiUrl });
 
+  
+
   console.log('bot is running');
 
   bot.setMyCommands([
@@ -80,17 +82,17 @@ try {
             // @ts-ignore
             result?.data.destroy();
 
-            // 保存答案
-            messages.push({
-              role: "assistant",
-              content: res.replace(/\s/g, '').slice(-500)
-            })
-
-
+            console.log(res);
             bot.editMessageText(res, {
               parse_mode: 'Markdown',
               chat_id,
               message_id
+            }).catch(err => {})
+           
+            // 保存答案
+            messages.push({
+              role: "assistant",
+              content: res.replace(/\s/g, '').slice(-500)
             })
             return;
           }
