@@ -23,8 +23,8 @@ export async function questionCompletion(messages, callback) {
       temperature: 0,
       stream: true,
       // stop: ["ME: ", "AI: "],
-      frequency_penalty: 0,
-      presence_penalty: 0.6
+      // frequency_penalty: 0,
+      // presence_penalty: 0.6
     }, {
       // timeout: 10000,
       // proxy: {
@@ -33,11 +33,22 @@ export async function questionCompletion(messages, callback) {
       // },
       responseType: 'stream',
     });
+
+    let count = 0;
+    messages.forEach(item => {
+      count += item.content.length
+    })
+    console.log(count)
     // 实时监听回答
     completion.data.on('data', callback);
     // console.log(completion.headers);
     return completion;
   } catch (error) {
+    let count = 0;
+    messages.forEach(item => {
+      count += item.content.length
+    })
+    console.log(count)
     console.log('error status =>', error);
   }
 }
