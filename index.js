@@ -44,7 +44,7 @@ wss.on('connection', function connection(ws) {
               const { delta: { content } } = parsed.choices[0];
 
               if (content) {
-                res += content;
+                res += `${content}`;
                 ws.send(content); // 发送给客户端
               }
 

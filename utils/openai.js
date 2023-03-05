@@ -23,8 +23,8 @@ export async function questionCompletion(messages, callback) {
       temperature: 0,
       stream: true,
       // stop: ["ME: ", "AI: "],
-      frequency_penalty: 0,
-      presence_penalty: 0.6
+      // frequency_penalty: 0,
+      // presence_penalty: 0.6
     }, {
       // timeout: 10000,
       // proxy: {
