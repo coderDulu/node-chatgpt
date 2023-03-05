@@ -27,28 +27,17 @@ export async function questionCompletion(messages, callback) {
       // presence_penalty: 0.6
     }, {
       // timeout: 10000,
-      // proxy: {
-      //   port: 7890,
-      //   // host: "127.0.0.1"
-      // },
+      proxy: {
+        port: 7890,
+        // host: "127.0.0.1"
+      },
       responseType: 'stream',
     });
-
-    let count = 0;
-    messages.forEach(item => {
-      count += item.content.length
-    })
-    console.log(count)
     // 实时监听回答
     completion.data.on('data', callback);
     // console.log(completion.headers);
     return completion;
   } catch (error) {
-    let count = 0;
-    messages.forEach(item => {
-      count += item.content.length
-    })
-    console.log(count)
     console.log('error status =>', error);
   }
 }
