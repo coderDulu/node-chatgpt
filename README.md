@@ -17,7 +17,9 @@
   // baseApiUrl：默认为https://api.telegram.org， 可填如自己搭建的url
   "baseApiUrl": "https://api.telegram.org",
   // openai apiKey
-  "apiKey": ""
+  "apiKey": "",
+  // proxy 设置代理
+  "proxy": "socks5://127.0.0.1:7890"
 }
 ~~~
 #### 4. npm start
