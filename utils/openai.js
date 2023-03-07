@@ -27,10 +27,10 @@ export async function questionCompletion(messages, callback) {
       // presence_penalty: 0.6
     }, {
       // timeout: 10000,
-      proxy: {
-        port: 7890,
-        // host: "127.0.0.1"
-      },
+      // proxy: {
+      //   port: 7890,
+      //   // host: "127.0.0.1"
+      // },
       responseType: 'stream',
     });
     // 实时监听回答
