@@ -20,5 +20,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '14.x'
+    - name: Create File
+      run: |
+        echo "{"apiKey": "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"}" > config.json
     - run: npm install
     - run: npm run start
