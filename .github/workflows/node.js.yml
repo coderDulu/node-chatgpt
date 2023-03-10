@@ -24,4 +24,6 @@ jobs:
       run: |
          echo '{"apiKey": "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"}' > config.json
     - run: npm install
-    - run: node index.js
+    - run: npm start
+      env:
+        PORT: 3100
