@@ -18,8 +18,8 @@ ws.on("connection", (conn) => {
   conn.on("message", (data) => {
     console.log(data);
   });
-  conn.send('233')
 });
+
 
 server.listen(port, () => {
   console.log("服务器已开启，端口号：" + port);

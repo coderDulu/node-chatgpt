@@ -20,7 +20,7 @@ export async function questionCompletion(messages, callback) {
       model: "gpt-3.5-turbo",
       messages,
       max_tokens: 3000,
-      temperature: 0,
+      temperature: 0.7,
       stream: true,
       // stop: ["ME: ", "AI: "],
       // frequency_penalty: 0,

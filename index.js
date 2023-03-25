@@ -2,7 +2,7 @@ import { WebSocketServer } from 'ws';
 import { questionCompletion } from './utils/openai.js';
 import { encode, decode } from 'gpt-3-encoder';
 
-const PORT = 3100;
+const PORT = 3200;
 
 const wss = new WebSocketServer({ port: PORT });
 
@@ -16,9 +16,10 @@ wss.on('connection', function connection(ws) {
 
   ws.on('message', async function message(data) {
     try {
-      const { text, type } = JSON.parse(data.toString());
+      const { text, type, value } = JSON.parse(data.toString());
 
-      if (type === 'stop') {
+      if (type === 'status' && value === "stop") {
+        console.log('stop send');
         completion.data.destroy();
         return;
       }
@@ -27,7 +28,7 @@ wss.on('connection', function connection(ws) {
         let res = '';  // 保存回复的数据
         console.log(text.length);
         // 开始
- 
+
         completion = await questionCompletion(text, data => {
           const lines = data.toString().split('\n').filter(line => line.trim() !== '');
 
@@ -35,7 +36,10 @@ wss.on('connection', function connection(ws) {
             const message = line.replace(/^data: /, '');
             if (message === '[DONE]') {
               console.log(res);
-              ws.send("end");
+              ws.send(JSON.stringify({
+                type: "status",
+                value: 'end'
+              }));
               return;
             }
             try {
@@ -45,7 +49,7 @@ wss.on('connection', function connection(ws) {
 
               if (content) {
                 res += `${content}`;
-                ws.send(content); // 发送给客户端
+                ws.send(JSON.stringify({ type: "answer", value: content })); // 发送给客户端
               }
 
             } catch (error) {
