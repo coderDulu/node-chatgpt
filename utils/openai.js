@@ -7,9 +7,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const config = fs.readFileSync(path.resolve(__dirname, '../config.json'), 'utf-8');
 
+const { apiKey, proxy } = JSON.parse(config);
 
 const configuration = new Configuration({
-  apiKey: JSON.parse(config).apiKey,
+  apiKey: apiKey,
 });
 const openai = new OpenAIApi(configuration);
 
@@ -26,11 +27,11 @@ export async function questionCompletion(messages, callback) {
       // frequency_penalty: 0,
       // presence_penalty: 0.6
     }, {
-      // timeout: 10000,
-      // proxy: {
-      //   port: 7890,
-      //   // host: "127.0.0.1"
-      // },
+      proxy: proxy ? {
+        host: proxy?.match(/http:\/\/(.*):(.*)/)[1],
+        port: proxy?.match(/http:\/\/(.*):(.*)/)[2],
+        // host: "127.0.0.1"
+      } : false,
       responseType: 'stream',
     });
     // 实时监听回答
