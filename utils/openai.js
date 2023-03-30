@@ -13,7 +13,6 @@ const configuration = new Configuration({
   apiKey: apiKey,
 });
 const openai = new OpenAIApi(configuration);
-
 export async function questionCompletion(messages, callback) {
   try {
 
@@ -21,15 +20,15 @@ export async function questionCompletion(messages, callback) {
       model: "gpt-3.5-turbo",
       messages,
       max_tokens: 3000,
-      temperature: 0.7,
+      // temperature: 0.7,
       stream: true,
       // stop: ["ME: ", "AI: "],
       // frequency_penalty: 0,
       // presence_penalty: 0.6
     }, {
       proxy: proxy ? {
-        host: proxy?.match(/http:\/\/(.*):(.*)/)[1],
-        port: proxy?.match(/http:\/\/(.*):(.*)/)[2],
+        host: proxy?.match(/https?:\/\/(.*):(.*)/)[1],
+        port: proxy?.match(/https?:\/\/(.*):(.*)/)[2],
         // host: "127.0.0.1"
       } : false,
       responseType: 'stream',
