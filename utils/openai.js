@@ -1,10 +1,6 @@
-import { Configuration, OpenAIApi } from 'openai';
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const { Configuration, OpenAIApi } =  require('openai');
+const fs = require('fs');
+const path = require('path');
 const config = fs.readFileSync(path.resolve(__dirname, '../config.json'), 'utf-8');
 
 const { apiKey, proxy } = JSON.parse(config);
@@ -13,7 +9,7 @@ const configuration = new Configuration({
   apiKey: apiKey,
 });
 const openai = new OpenAIApi(configuration);
-export async function questionCompletion(messages, callback) {
+async function questionCompletion(messages, callback) {
   try {
 
     const completion = await openai.createChatCompletion({
@@ -42,6 +38,7 @@ export async function questionCompletion(messages, callback) {
   }
 }
 
+
 function chineseToUnicode(str) {
   // if(!str) return;
   let unicodeStr = "";
@@ -52,6 +49,8 @@ function chineseToUnicode(str) {
   return unicodeStr;
 }
 
+
+// 测试
 (async () => {
   const text = [
     { role: "user", content: '你好' },
@@ -83,3 +82,7 @@ function chineseToUnicode(str) {
     }
   }); // 获取result
 })
+
+module.exports =  {
+  questionCompletion
+}
