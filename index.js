@@ -6,7 +6,7 @@ const { questionCompletion } =  require('./utils/openai.js')
 
 
 const app = new Koa();
-const port = 3000;
+const port = 3200;
 
 // 静态资源服务器
 app.use(serve('public'));
