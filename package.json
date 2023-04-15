@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["node", "chatgpt", "openai"],
+  "keywords": [
+    "node",
+    "chatgpt",
+    "openai"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -17,5 +20,9 @@
     "gpt-3-encoder": "^1.1.4",
     "openai": "^3.2.1",
     "ws": "^8.12.1"
+  },
+  "devDependencies": {
+    "koa": "^2.14.2",
+    "koa-static": "^5.0.0"
   }
 }
