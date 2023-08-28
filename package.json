@@ -1,0 +1,37 @@
+{
+  "name": "chatgpt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild index.js --bundle --minify --outfile=dist.js --platform=node"
+  },
+  "keywords": [
+    "node",
+    "chatgpt",
+    "openai",
+    "chatgpt web"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@rollup/plugin-json": "^6.0.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "esbuild": "^0.18.17",
+    "express": "^4.18.2",
+    "gpt-3-encoder": "^1.1.4",
+    "koa-router": "^12.0.0",
+    "openai": "^3.2.1",
+    "ws": "^8.12.1"
+  },
+  "devDependencies": {
+    "koa": "^2.14.2",
+    "koa-static": "^5.0.0",
+    "rollup": "^3.27.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  }
+}
