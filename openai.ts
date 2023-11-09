@@ -1,24 +1,39 @@
 import OpenAI from "openai";
 import * as dotenv from "dotenv";
+import type { ChatCompletionMessageParam } from "openai/resources";
+import type { Stream } from "openai/streaming";
 dotenv.config();
 
 const openai = new OpenAI({
   apiKey: process.env.APIKEY,
 });
 
-async function main() {
-  const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
-    messages: [
-      { role: "system", content: "You are a helpful assistant." },
-      { role: "user", content: "Hello!" },
-    ],
-    stream: true,
-  });
+class OpenAITool {
+  stream: Stream<OpenAI.Chat.Completions.ChatCompletionChunk>
 
-  for await (const chunk of completion) {
-    console.log(chunk.choices[0].delta.content);
+  async request(messages: Array<ChatCompletionMessageParam>, callback: (data: any) => void) {
+    this.stream = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages,
+      stream: true,
+    });
+
+    for await (const chunk of this.stream) {
+      const anwser = chunk.choices[0].delta.content
+      callback(anwser)
+    }
   }
+
+  abort() {
+    this.stream.controller.abort()
+  }
+
 }
 
-main();
+
+
+// main([{ role: 'user', content: '你好' }], (data) => {
+//   console.log(data)
+// })
+
+export default OpenAITool
