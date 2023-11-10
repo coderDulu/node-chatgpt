@@ -9,7 +9,7 @@ const openai = new OpenAI({
 });
 
 class OpenAITool {
-  stream: Stream<OpenAI.Chat.Completions.ChatCompletionChunk>
+  stream: Stream<OpenAI.Chat.Completions.ChatCompletionChunk> | null = null
 
   async request(messages: Array<ChatCompletionMessageParam>, callback: (data: any) => void) {
     this.stream = await openai.chat.completions.create({
@@ -25,15 +25,17 @@ class OpenAITool {
   }
 
   abort() {
-    this.stream.controller.abort()
+    this.stream?.controller.abort()
   }
 
 }
 
 
+// const openAITool = new OpenAITool()
 
-// main([{ role: 'user', content: '你好' }], (data) => {
+// openAITool.request([{ role: 'user', content: '你好' }], (data) => {
 //   console.log(data)
 // })
+
 
 export default OpenAITool

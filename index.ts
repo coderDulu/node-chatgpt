@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import OpenAITool from "./openai";
+import type { Response } from 'express'
 
 // const cors = require("cors");
 const app = express();
@@ -11,25 +12,12 @@ app.use(bodyParser.json());
 
 const openaiTool = new OpenAITool()
 
-app.post("/api/question", async (req: { body: any; }, res: { setHeader: (arg0: string, arg1: string) => void; write: (arg0: string) => void; end: () => void; }) => {
+app.post("/api/question", async (req, res) => {
   console.log(req.body);
-  res.setHeader("Content-Type", "text/event-stream");
-  handleRes(req.body, (answer: string) => {
-    console.log("res => ", answer);
-    if (answer === "[DONE]") {
-      res.write(
-        JSON.stringify({
-          type: "status",
-          value: "end",
-        })
-      );
-
-      res.end();
-    } else {
-      res.write(answer);
-    }
-  });
+  // res.setHeader("Content-Type", "text/event-stream");
+  handleRes(req.body, res);
 });
+
 
 /**
  *
@@ -37,26 +25,36 @@ app.post("/api/question", async (req: { body: any; }, res: { setHeader: (arg0: s
  * @param {*} callback 响应回调
  * @returns
  */
-async function handleRes(data: { text: any; type: any; value: any; }, callback: { (answer: any): void; (arg0: string): void; }) {
+async function handleRes(data: { text: any; type: any; value: any; }, res: Response) {
   try {
     const { text, type, value } = data;
 
     // 中止请求
     if (type === "status" && value === "stop") {
       console.log("stop send");
-      callback("[DONE]");
+      // callback("[DONE]");
+      res.write(
+        JSON.stringify({
+          type: "status",
+          value: "end",
+        })
+      );
       openaiTool.abort()
+      res.end()
     }
-    
+
     // 开始请求
     if (text) {
       // 开始
       await openaiTool.request(text, (data) => {
         console.log("anwser data: ", data)
+        res.write(data);
       }); // 获取result
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    console.log(error)
+    res.status(error?.status || 401)
+    res.json(error)
   }
 }
 
